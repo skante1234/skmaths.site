@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminale · SKmaths</title>
+  <meta name="description" content="Tous les cours, exercices et annales de mathématiques pour la Terminale spé. Préparation au bac et à Parcoursup." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="skmaths.css">
+  <style>
+    /* ===== Spécifique page niveau ===== */
+    .niveau-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin: 2.5rem 0 0;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid);
+    }
+    @media (max-width: 720px) { .niveau-meta { grid-template-columns: 1fr; } }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .meta-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .meta-value {
+      font-family: var(--display);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    /* Progression */
+    .progress-section {
+      margin: 4rem 0;
+    }
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: var(--grid);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cos), var(--sin));
+      border-radius: 3px;
+    }
+    .progress-num {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* Liste des chapitres */
+    .chapters-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 2rem;
+    }
+    .chapter-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--grid);
+      align-items: center;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    @media (max-width: 640px) {
+      .chapter-row { grid-template-columns: 50px 1fr; }
+      .chapter-status { grid-column: 2; margin-top: 0.5rem; }
+    }
+    .chapter-row:hover {
+      padding-left: 0.8rem;
+      background: rgba(251, 246, 236, 0.5);
+    }
+    .chapter-num {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+    }
+    .chapter-body { flex: 1; }
+    .chapter-title {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-style: italic;
+      font-weight: 500;
+      margin: 0 0 0.3rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .chapter-desc {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .chapter-status {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-dot.complete { background: var(--cos); }
+    .status-dot.partial { background: var(--tan); }
+    .status-dot.empty { background: var(--grid); border: 1px solid var(--ink-soft); }
+    .status-text {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    /* Section annales */
+    .annales-section {
+      background: var(--paper);
+      border: 1px solid var(--grid);
+      padding: 2.5rem;
+      margin: 4rem 0;
+      position: relative;
+    }
+    .annales-section h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .annales-section h2 em { color: var(--sin); font-style: italic; font-weight: 500; }
+    .annales-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 720px) { .annales-grid { grid-template-columns: 1fr; } }
+    .annale-card {
+      background: var(--bg);
+      border: 1px solid var(--grid);
+      padding: 1.2rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+    }
+    .annale-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--ink);
+    }
+    .annale-year {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      color: var(--tan);
+    }
+    .annale-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .annale-meta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.06em;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    /* Vidéos associées (mini-version) */
+    .videos-mini {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 880px) { .videos-mini { grid-template-columns: repeat(2, 1fr); } }
+    .video-mini {
+      aspect-ratio: 9/16;
+      background: var(--ink);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.25s ease;
+      text-decoration: none;
+      display: block;
+    }
+    .video-mini:hover { transform: scale(1.02); }
+    .video-mini-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1rem;
+      background: linear-gradient(transparent, rgba(26,29,46,0.9));
+      color: var(--bg);
+    }
+    .video-mini-title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .video-mini-stats {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: rgba(244,237,224,0.7);
+      margin-top: 0.3rem;
+      letter-spacing: 0.08em;
+    }
+    .play-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: rgba(244,237,224,0.95);
+      display: grid;
+      place-items: center;
+    }
+    .play-icon::after {
+      content: "";
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 9px 0 9px 15px;
+      border-color: transparent transparent transparent var(--ink);
+      margin-left: 3px;
+    }
+    .video-mini-bg {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      color: var(--tan); opacity: 0.4;
+      font-family: var(--display); font-size: 3rem;
+      font-style: italic; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top">
+    <div class="container row">
+      <a href="index.html" class="brand">
+        <span class="brand-mark"></span>
+        <span>SKmaths</span>
+      </a>
+      <div class="nav-links">
+        <a href="niveau.html" class="active">Niveaux</a>
+        <a href="chapitre.html">Cours</a>
+        <a href="outil.html">Outils</a>
+        <a href="index.html#videos">Vidéos</a>
+        <a href="index.html#about">À propos</a>
+      </div>
+      <a href="index.html#newsletter" class="nav-cta">S'abonner</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Fil d'Ariane -->
+    <nav class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span class="sep">/</span>
+      <a href="niveau.html">Niveaux</a>
+      <span class="sep">/</span>
+      <span style="color: var(--ink);">Terminale</span>
+    </nav>
+
+    <!-- Tête de page -->
+    <header class="page-head">
+      <div class="eyebrow-row">
+        <span class="line"></span>
+        <span class="eyebrow">Niveau 04 · Lycée — Année du Bac</span>
+      </div>
+      <h1>
+        <em>Terminale.</em><br>
+        Spécialité mathématiques.
+      </h1>
+      <p class="lede">
+        Suites, limites, dérivées, intégrales, probabilités conditionnelles, géométrie dans l'espace. L'année où tout se met en place pour le bac et pour la suite. Tous les chapitres du programme officiel, alignés avec les attendus de Parcoursup.
+      </p>
+
+      <div class="niveau-meta">
+        <div class="meta-item">
+          <span class="meta-label">Programme officiel</span>
+          <span class="meta-value">BO 2023, en vigueur</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Volume horaire</span>
+          <span class="meta-value">6 h hebdomadaires</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Examen final</span>
+          <span class="meta-value">Coefficient 16</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Progression -->
+    <section class="progress-section">
+      <div class="section-head">
+        <div class="left">
+          <span class="eyebrow">§ I — Progression annuelle</span>
+          <h2>10 chapitres,<br>répartis sur l'<em>année</em>.</h2>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 70%;"></div>
+        </div>
+        <span class="progress-num">7 / 10</span>
+      </div>
+      <p style="color: var(--ink-soft); font-size: 0.9rem; margin-top: 0.6rem; font-style: italic;">
+        Cours publiés à ce jour. Mise à jour hebdomadaire pendant l'année scolaire.
+      </p>
+    </section>
+
+    <!-- Liste des chapitres -->
+    <section>
+      <div class="chapters-list">
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 01</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Combinatoire et dénombrement</h3>
+            <p class="chapter-desc">Permutations, combinaisons, formule du binôme.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Cours · Exos · Vidéo</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 02</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Suites — limites et raisonnement par récurrence</h3>
+            <p class="chapter-desc">Convergence, théorèmes de comparaison, suites adjacentes.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 03</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Limites de fonctions</h3>
+            <p class="chapter-desc">Asymptotes, opérations sur les limites, formes indéterminées.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 04</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Continuité et théorème des valeurs intermédiaires</h3>
+            <p class="chapter-desc">Théorème de la bijection, méthode de dichotomie.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 05</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Compléments sur la dérivation</h3>
+            <p class="chapter-desc">Composée, dérivées successives, convexité.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 06</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Fonction logarithme népérien</h3>
+            <p class="chapter-desc">Définition, propriétés algébriques, étude de fonction.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 07</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Fonctions trigonométriques</h3>
+            <p class="chapter-desc">Dérivées de sin et cos, étude complète, équations trigonométriques.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot complete"></span>
+            <span class="status-text">Complet</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 08</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Primitives — Calcul intégral</h3>
+            <p class="chapter-desc">Intégration par parties, calcul d'aires, valeur moyenne.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot partial"></span>
+            <span class="status-text">Cours · Exos en cours</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 09</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Probabilités conditionnelles — Variables aléatoires</h3>
+            <p class="chapter-desc">Loi binomiale, espérance, variance, concentration.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot empty"></span>
+            <span class="status-text">À venir</span>
+          </div>
+        </a>
+
+        <a href="chapitre.html" class="chapter-row">
+          <span class="chapter-num">CH. 10</span>
+          <div class="chapter-body">
+            <h3 class="chapter-title">Géométrie dans l'espace — Produit scalaire</h3>
+            <p class="chapter-desc">Vecteurs, droites et plans, orthogonalité, équations.</p>
+          </div>
+          <div class="chapter-status">
+            <span class="status-dot empty"></span>
+            <span class="status-text">À venir</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Annales -->
+    <section class="annales-section">
+      <span class="eyebrow">§ II — Annales corrigées</span>
+      <h2>Bac, <em>session après session</em>.</h2>
+      <p style="color: var(--ink-soft); max-width: 540px; margin: 0.6rem 0 0;">
+        Sujets de bac récents, corrigés rédigés intégralement, avec vidéos d'explication pour les questions difficiles.
+      </p>
+      <div class="annales-grid">
+        <a href="#" class="annale-card">
+          <span class="annale-year">SESSION 2025</span>
+          <h3 class="annale-title">Métropole — Jour 1</h3>
+          <p style="color: var(--ink-soft); font-size: 0.88rem; margin: 0;">Suites, fonction exponentielle, géométrie.</p>
+          <span class="annale-meta">PDF · Corrigé · Vidéo</span>
+        </a>
+        <a href="#" class="annale-card">
+          <span class="annale-year">SESSION 2025</span>
+          <h3 class="annale-title">Métropole — Jour 2</h3>
+          <p style="color: var(--ink-soft); font-size: 0.88rem; margin: 0;">Logarithme, probabilités, espace.</p>
+          <span class="annale-meta">PDF · Corrigé · Vidéo</span>
+        </a>
+        <a href="#" class="annale-card">
+          <span class="annale-year">SESSION 2024</span>
+          <h3 class="annale-title">Centres étrangers</h3>
+          <p style="color: var(--ink-soft); font-size: 0.88rem; margin: 0;">Intégrales, suites, loi binomiale.</p>
+          <span class="annale-meta">PDF · Corrigé · Vidéo</span>
+        </a>
+      </div>
+      <div style="margin-top: 1.5rem;">
+        <a href="#" class="btn btn-ghost btn-small">Toutes les annales →</a>
+      </div>
+    </section>
+
+    <!-- Vidéos associées -->
+    <section>
+      <div class="section-head">
+        <div class="left">
+          <span class="eyebrow">§ III — Vidéos du niveau</span>
+          <h2>À regarder<br>en <em>complément</em>.</h2>
+        </div>
+      </div>
+      <div class="videos-mini">
+        <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="video-mini">
+          <div class="video-mini-bg">∫</div>
+          <div class="play-icon"></div>
+          <div class="video-mini-text">
+            <h4 class="video-mini-title">Intégration par parties — méthode</h4>
+            <div class="video-mini-stats">YouTube · 14K</div>
+          </div>
+        </a>
+        <a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener" class="video-mini">
+          <div class="video-mini-bg">ln</div>
+          <div class="play-icon"></div>
+          <div class="video-mini-text">
+            <h4 class="video-mini-title">Pourquoi le ln est si utile</h4>
+            <div class="video-mini-stats">TikTok · 38K</div>
+          </div>
+        </a>
+        <a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener" class="video-mini">
+          <div class="video-mini-bg">B(n,p)</div>
+          <div class="play-icon"></div>
+          <div class="video-mini-text">
+            <h4 class="video-mini-title">Loi binomiale → loi normale</h4>
+            <div class="video-mini-stats">TikTok · 22K</div>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="video-mini">
+          <div class="video-mini-bg">u<tspan style="font-size:0.6em">n+1</tspan></div>
+          <div class="play-icon"></div>
+          <div class="video-mini-text">
+            <h4 class="video-mini-title">Suites récurrentes — la méthode</h4>
+            <div class="video-mini-stats">YouTube · 9K</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand">
+            <span class="brand-mark"></span>
+            <span>SKmaths</span>
+          </a>
+          <p class="footer-tagline">
+            Le hub des maths du collège à la prépa. Cours, exercices, vidéos et outils interactifs — par un professeur en exercice.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Contenus</h4>
+          <ul>
+            <li><a href="niveau.html">Cours par niveau</a></li>
+            <li><a href="chapitre.html">Exercices corrigés</a></li>
+            <li><a href="#">Annales</a></li>
+            <li><a href="outil.html">Outils interactifs</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Réseaux</h4>
+          <ul>
+            <li><a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener">TikTok @nba9517</a></li>
+            <li><a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="index.html#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>À propos</h4>
+          <ul>
+            <li><a href="index.html#about">Le projet</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Cours particuliers</a></li>
+            <li><a href="#">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SKmaths. Tous droits réservés.</span>
+        <span>Conçu avec rigueur.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

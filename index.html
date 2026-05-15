@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKmaths · Du collège à la prépa</title>
+  <meta name="description" content="Cours, exercices, corrigés et animations de mathématiques du collège à la prépa. Par Souleymane Kanté, professeur de mathématiques." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="skmaths.css">
+  <style>
+    /* ===== Spécifique accueil ===== */
+    .hero { padding: 4rem 0 5rem; position: relative; overflow: hidden; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.3fr 1fr;
+      gap: 3rem; align-items: center;
+    }
+    @media (max-width: 880px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero { padding: 2.5rem 0 3rem; }
+    }
+    .hero-eyebrow {
+      display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow .line {
+      flex: 0 0 60px; height: 1px; background: var(--ink); opacity: 0.4;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 0.98; letter-spacing: -0.02em;
+      margin: 0; font-weight: 400;
+    }
+    .hero h1 em { font-style: italic; font-weight: 500; color: var(--cos); }
+    .hero h1 .underline {
+      display: inline-block; position: relative; font-weight: 700;
+    }
+    .hero h1 .underline::after {
+      content: "";
+      position: absolute; left: 0; right: 0; bottom: 0.05em;
+      height: 0.18em; background: var(--tan); opacity: 0.35; z-index: -1;
+    }
+    .hero-lede {
+      font-size: 1.15rem; color: var(--ink-soft);
+      margin: 1.5rem 0 2rem; max-width: 480px; line-height: 1.5;
+    }
+    .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 3rem;
+      padding-top: 2rem; border-top: 1px solid var(--grid); flex-wrap: wrap;
+    }
+    .stat .num {
+      font-family: var(--display); font-size: 2.2rem;
+      font-weight: 600; font-style: italic; line-height: 1; color: var(--ink);
+    }
+    .stat .lab {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-soft); margin-top: 0.4rem;
+    }
+    .hero-visual {
+      position: relative; aspect-ratio: 1; max-width: 420px; justify-self: end;
+    }
+    @media (max-width: 880px) { .hero-visual { justify-self: center; } }
+    .hero-visual svg { width: 100%; height: 100%; display: block; }
+    .hero-visual::before {
+      content: ""; position: absolute; inset: -20px;
+      border: 1px solid var(--grid); border-radius: 50%; opacity: 0.7;
+    }
+    .hero-visual::after {
+      content: "FIG. I — CERCLE TRIGONOMÉTRIQUE";
+      position: absolute; bottom: -2.5rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.18em; color: var(--ink-soft); white-space: nowrap;
+    }
+    section { padding: 5rem 0; position: relative; }
+    @media (max-width: 880px) { section { padding: 3.5rem 0; } }
+    .section-head .right {
+      max-width: 360px; color: var(--ink-soft);
+      font-size: 1rem; line-height: 1.5;
+    }
+    .niveaux-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; }
+    @media (max-width: 1024px) { .niveaux-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .niveaux-grid { grid-template-columns: 1fr; } }
+    .niveau-card {
+      background: var(--paper); border: 1px solid var(--grid);
+      padding: 1.8rem 1.4rem; cursor: pointer; position: relative;
+      transition: all 0.3s ease; overflow: hidden;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      min-height: 220px; text-decoration: none; color: inherit;
+    }
+    .niveau-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .niveau-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(26, 29, 46, 0.08);
+    }
+    .niveau-card:hover::before { transform: scaleX(1); }
+    .niveau-num {
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.2em; color: var(--ink-soft);
+    }
+    .niveau-name {
+      font-family: var(--display); font-size: 1.5rem;
+      font-style: italic; font-weight: 500; color: var(--ink);
+    }
+    .niveau-desc {
+      font-size: 0.92rem; color: var(--ink-soft);
+      line-height: 1.45; flex: 1;
+    }
+    .niveau-arrow {
+      font-family: var(--display); font-size: 1.3rem;
+      color: var(--accent); align-self: flex-end;
+      transition: transform 0.3s ease;
+    }
+    .niveau-card:hover .niveau-arrow { transform: translateX(6px); }
+    .cours-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 880px) { .cours-grid { grid-template-columns: 1fr; } }
+    .cours-card {
+      background: var(--paper); border: 1px solid var(--grid);
+      padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem;
+      transition: all 0.3s ease; cursor: pointer; position: relative;
+      text-decoration: none; color: inherit;
+    }
+    .cours-card.featured {
+      grid-row: span 2;
+      background: linear-gradient(135deg, rgba(44,72,112,0.03) 0%, transparent 60%), var(--paper);
+    }
+    .cours-card:hover { box-shadow: 0 8px 25px rgba(26,29,46,0.06); }
+    .cours-title {
+      font-family: var(--display); font-size: 1.4rem;
+      font-weight: 500; line-height: 1.15;
+      letter-spacing: -0.01em; color: var(--ink); margin: 0;
+    }
+    .cours-card.featured .cours-title { font-size: 2rem; font-style: italic; }
+    .cours-excerpt {
+      color: var(--ink-soft); font-size: 0.95rem; line-height: 1.5; flex: 1;
+    }
+    .cours-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 1rem; border-top: 1px solid var(--grid);
+      font-family: var(--mono); font-size: 0.7rem;
+      color: var(--ink-soft); letter-spacing: 0.08em;
+    }
+    .manifesto {
+      background: var(--paper); border-top: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid); padding: 6rem 0; position: relative;
+    }
+    .manifesto::before {
+      content: ""; position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(0deg, transparent 0, transparent 23px, var(--grid) 23px, var(--grid) 24px);
+      opacity: 0.5; pointer-events: none;
+    }
+    .manifesto-inner {
+      max-width: 760px; margin: 0 auto; text-align: center; position: relative;
+    }
+    .manifesto blockquote {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      font-style: italic; font-weight: 400;
+      line-height: 1.25; letter-spacing: -0.01em;
+      margin: 1.5rem 0; color: var(--ink);
+    }
+    .manifesto blockquote::before { content: "« "; color: var(--tan); }
+    .manifesto blockquote::after { content: " »"; color: var(--tan); }
+    .manifesto .author {
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-soft); margin-top: 1rem;
+    }
+    .tools-banner {
+      background: var(--ink); color: var(--bg);
+      padding: 4rem 0; position: relative; overflow: hidden;
+    }
+    .tools-banner::before {
+      content: ""; position: absolute;
+      top: -50%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(184, 122, 44, 0.18), transparent 60%);
+      pointer-events: none;
+    }
+    .tools-banner .container {
+      position: relative; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    }
+    @media (max-width: 880px) { .tools-banner .container { grid-template-columns: 1fr; } }
+    .tools-banner h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      margin: 0.8rem 0 1rem; font-weight: 400;
+      line-height: 1.1; letter-spacing: -0.01em;
+    }
+    .tools-banner h2 em { color: var(--tan); font-style: italic; }
+    .tools-banner p {
+      color: rgba(244, 237, 224, 0.7); max-width: 440px;
+      line-height: 1.5; margin: 0 0 1.8rem;
+    }
+    .tools-banner .btn-primary {
+      background: var(--bg); color: var(--ink); border-color: var(--bg);
+    }
+    .tools-banner .btn-primary:hover { background: var(--tan); border-color: var(--tan); color: var(--ink); }
+    .tools-banner .eyebrow { color: rgba(244, 237, 224, 0.55); }
+    .tools-list { display: flex; flex-direction: column; gap: 0; }
+    .tool-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(244, 237, 224, 0.12);
+      cursor: pointer; transition: padding 0.3s ease;
+      text-decoration: none; color: inherit;
+    }
+    .tool-item:hover { padding-left: 0.6rem; }
+    .tool-item:last-child { border-bottom: none; }
+    .tool-name {
+      font-family: var(--display); font-style: italic;
+      font-size: 1.25rem; font-weight: 500;
+    }
+    .tool-num {
+      font-family: var(--mono); font-size: 0.7rem;
+      color: rgba(244, 237, 224, 0.5); letter-spacing: 0.15em;
+    }
+    .tool-arrow {
+      font-family: var(--display); font-size: 1.4rem;
+      color: var(--tan); transition: transform 0.3s ease;
+    }
+    .tool-item:hover .tool-arrow { transform: translateX(8px); }
+    .videos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    @media (max-width: 880px) { .videos-grid { grid-template-columns: 1fr; } }
+    .video-card {
+      background: var(--paper); border: 1px solid var(--grid);
+      overflow: hidden; cursor: pointer; transition: all 0.3s ease;
+      text-decoration: none; color: inherit; display: block;
+    }
+    .video-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(26,29,46,0.08); }
+    .video-thumb {
+      aspect-ratio: 9/16; background: var(--ink);
+      position: relative; display: grid; place-items: center; overflow: hidden;
+    }
+    .video-thumb svg { width: 60%; height: auto; opacity: 0.9; }
+    .video-thumb::after {
+      content: ""; position: absolute;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(244, 237, 224, 0.95);
+      display: grid; place-items: center;
+    }
+    .video-thumb::before {
+      content: ""; position: absolute; z-index: 2;
+      width: 0; height: 0; border-style: solid;
+      border-width: 11px 0 11px 18px;
+      border-color: transparent transparent transparent var(--ink);
+      margin-left: 4px;
+    }
+    .video-info { padding: 1.1rem 1.2rem; }
+    .video-platform {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.18em; color: var(--sin); text-transform: uppercase;
+    }
+    .video-title {
+      font-family: var(--display); font-size: 1.05rem;
+      font-style: italic; font-weight: 500;
+      margin: 0.3rem 0 0.6rem; line-height: 1.25; color: var(--ink);
+    }
+    .video-stats {
+      font-family: var(--mono); font-size: 0.7rem;
+      color: var(--ink-soft); letter-spacing: 0.06em;
+    }
+    .newsletter { padding: 5rem 0; text-align: center; position: relative; }
+    .newsletter-inner { max-width: 580px; margin: 0 auto; }
+    .newsletter h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 400; margin: 1rem 0;
+      letter-spacing: -0.01em; line-height: 1.1;
+    }
+    .newsletter h2 em { font-style: italic; color: var(--sin); }
+    .newsletter p {
+      color: var(--ink-soft); margin: 0 0 2rem; font-size: 1.05rem;
+    }
+    .newsletter-form {
+      display: flex; gap: 0.5rem; max-width: 460px; margin: 0 auto;
+    }
+    @media (max-width: 520px) { .newsletter-form { flex-direction: column; } }
+    .newsletter-form input {
+      flex: 1; padding: 0.9rem 1.1rem;
+      background: var(--paper); border: 1px solid var(--grid);
+      font-family: var(--serif); font-size: 1rem; font-style: italic;
+      color: var(--ink); border-radius: 2px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .newsletter-form input:focus { border-color: var(--ink); }
+    .newsletter-meta {
+      font-family: var(--mono); font-size: 0.7rem;
+      color: var(--ink-soft); letter-spacing: 0.1em; margin-top: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="top">
+    <div class="container row">
+      <a href="index.html" class="brand">
+        <span class="brand-mark"></span>
+        <span>SKmaths</span>
+      </a>
+      <div class="nav-links">
+        <a href="niveau.html">Niveaux</a>
+        <a href="chapitre.html">Cours</a>
+        <a href="outil.html">Outils</a>
+        <a href="#videos">Vidéos</a>
+        <a href="#about">À propos</a>
+      </div>
+      <a href="#newsletter" class="nav-cta">S'abonner</a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="line"></span>
+          <span class="eyebrow">Professeur de mathématiques · 2026</span>
+        </div>
+        <h1>
+          Les maths,<br>
+          du <em>collège</em><br>
+          à la <span class="underline">prépa</span>.
+        </h1>
+        <p class="hero-lede">
+          Cours rigoureux, exercices progressifs, animations visuelles.
+          Pour comprendre vraiment — pas seulement réussir le contrôle.
+        </p>
+        <div class="hero-cta">
+          <a href="niveau.html" class="btn btn-primary">Voir les cours →</a>
+          <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="btn btn-ghost">Regarder les vidéos</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="num">70</div>
+            <div class="lab">Cours rédigés</div>
+          </div>
+          <div class="stat">
+            <div class="num">450+</div>
+            <div class="lab">Exercices corrigés</div>
+          </div>
+          <div class="stat">
+            <div class="num">1 100+</div>
+            <div class="lab">Followers sociaux</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cercle trigo stylisé -->
+      <div class="hero-visual">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hg" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#dfd5bf" stroke-width="0.5" opacity="0.6"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="400" fill="#fbf6ec"/>
+          <rect width="400" height="400" fill="url(#hg)"/>
+          <line x1="30" y1="200" x2="370" y2="200" stroke="#1a1d2e" stroke-width="1" opacity="0.4"/>
+          <line x1="200" y1="30" x2="200" y2="370" stroke="#1a1d2e" stroke-width="1" opacity="0.4"/>
+          <circle cx="200" cy="200" r="130" fill="none" stroke="#1a1d2e" stroke-width="1.5"/>
+          <line x1="200" y1="200" x2="291.92" y2="108.08" stroke="#1a1d2e" stroke-width="1.2"/>
+          <line x1="200" y1="200" x2="291.92" y2="200" stroke="#2c4870" stroke-width="4" stroke-linecap="round"/>
+          <line x1="200" y1="200" x2="200" y2="108.08" stroke="#a83246" stroke-width="4" stroke-linecap="round"/>
+          <line x1="291.92" y1="108.08" x2="291.92" y2="200" stroke="#a83246" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+          <line x1="291.92" y1="108.08" x2="200" y2="108.08" stroke="#2c4870" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+          <path d="M 230 200 A 30 30 0 0 0 221.21 178.79" fill="none" stroke="#1a1d2e" stroke-width="1.2" opacity="0.7"/>
+          <text x="240" y="190" font-family="EB Garamond, serif" font-size="16" font-style="italic" font-weight="600" fill="#1a1d2e">θ</text>
+          <text x="240" y="226" font-family="EB Garamond, serif" font-size="13" font-style="italic" fill="#2c4870" font-weight="600">cos θ</text>
+          <text x="160" y="160" font-family="EB Garamond, serif" font-size="13" font-style="italic" fill="#a83246" font-weight="600">sin θ</text>
+          <circle cx="200" cy="200" r="3" fill="#1a1d2e"/>
+          <circle cx="291.92" cy="108.08" r="6.5" fill="#fbf6ec" stroke="#1a1d2e" stroke-width="2.5"/>
+          <text x="300" y="100" font-family="EB Garamond, serif" font-size="16" font-style="italic" font-weight="600" fill="#1a1d2e">M</text>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- NIVEAUX -->
+  <section id="niveaux" style="position:relative;">
+    <span class="decoration-numeral" style="top: 1rem; right: -2rem;">I</span>
+    <div class="container">
+      <div class="section-head">
+        <div class="left">
+          <span class="eyebrow">§ I — Trouver son niveau</span>
+          <h2>Cinq <em>parcours</em>,<br>une seule exigence.</h2>
+        </div>
+        <div class="right">
+          Chaque niveau dispose de cours complets, d'exercices classés par difficulté et d'annales corrigées. Du 6<sup>e</sup> aux concours.
+        </div>
+      </div>
+      <div class="niveaux-grid">
+        <a href="niveau.html" class="niveau-card" style="--accent: #b87a2c;">
+          <div class="niveau-num">01</div>
+          <div class="niveau-name">Collège</div>
+          <div class="niveau-desc">De la 6<sup>e</sup> à la 3<sup>e</sup>. Préparation au brevet.</div>
+          <div class="niveau-arrow">→</div>
+        </a>
+        <a href="niveau.html" class="niveau-card" style="--accent: #2c4870;">
+          <div class="niveau-num">02</div>
+          <div class="niveau-name">Seconde</div>
+          <div class="niveau-desc">Tronc commun. Bases solides pour la spécialité.</div>
+          <div class="niveau-arrow">→</div>
+        </a>
+        <a href="niveau.html" class="niveau-card" style="--accent: #a83246;">
+          <div class="niveau-num">03</div>
+          <div class="niveau-name">Première</div>
+          <div class="niveau-desc">Spécialité maths. Suites, dérivation, probabilités.</div>
+          <div class="niveau-arrow">→</div>
+        </a>
+        <a href="niveau.html" class="niveau-card" style="--accent: #2c4870;">
+          <div class="niveau-num">04</div>
+          <div class="niveau-name">Terminale</div>
+          <div class="niveau-desc">Spé + expertes. Préparation bac et Parcoursup.</div>
+          <div class="niveau-arrow">→</div>
+        </a>
+        <a href="niveau.html" class="niveau-card" style="--accent: #1a1d2e;">
+          <div class="niveau-num">05</div>
+          <div class="niveau-name">Prépa</div>
+          <div class="niveau-desc">MPSI, PCSI, ECG. Méthodes de concours.</div>
+          <div class="niveau-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DERNIERS COURS -->
+  <section id="cours" style="background: var(--bg-deep); position:relative;">
+    <span class="decoration-numeral" style="top: 2rem; left: -3rem;">II</span>
+    <div class="container">
+      <div class="section-head">
+        <div class="left">
+          <span class="eyebrow">§ II — Dernières publications</span>
+          <h2>Cours <em>récemment</em><br>publiés.</h2>
+        </div>
+        <div class="right">
+          Mis à jour chaque semaine, alignés sur les programmes officiels.
+        </div>
+      </div>
+      <div class="cours-grid">
+        <a href="chapitre.html" class="cours-card featured">
+          <span class="tag tag-sin">Terminale · Probabilités</span>
+          <h3 class="cours-title">La loi binomiale devient la loi normale — et c'est magique.</h3>
+          <p class="cours-excerpt">Cours complet sur la convergence de la loi binomiale vers la loi normale, avec animation Manim et démonstration pas à pas du théorème central limite dans son cadre élémentaire.</p>
+          <div class="cours-meta">
+            <span>Publié il y a 3 jours</span>
+            <span>12 min de lecture</span>
+          </div>
+        </a>
+        <a href="chapitre.html" class="cours-card">
+          <span class="tag tag-cos">Première · Suites</span>
+          <h3 class="cours-title">Suites arithmétiques et géométriques.</h3>
+          <p class="cours-excerpt">Définitions, formules, exemples typés bac.</p>
+          <div class="cours-meta">
+            <span>Il y a 1 sem.</span>
+            <span>9 min</span>
+          </div>
+        </a>
+        <a href="chapitre.html" class="cours-card">
+          <span class="tag tag-ink">Prépa · Analyse</span>
+          <h3 class="cours-title">Théorème de Bolzano-Weierstrass.</h3>
+          <p class="cours-excerpt">Énoncé, démonstration, applications.</p>
+          <div class="cours-meta">
+            <span>Il y a 2 sem.</span>
+            <span>15 min</span>
+          </div>
+        </a>
+        <a href="chapitre.html" class="cours-card">
+          <span class="tag tag-cos">Première · Trigonométrie</span>
+          <h3 class="cours-title">Mesure principale d'un angle.</h3>
+          <p class="cours-excerpt">Méthode pas à pas, avec cercle interactif.</p>
+          <div class="cours-meta">
+            <span>Il y a 2 sem.</span>
+            <span>7 min</span>
+          </div>
+        </a>
+        <a href="chapitre.html" class="cours-card">
+          <span class="tag tag-tan">3<sup>e</sup> · Brevet</span>
+          <h3 class="cours-title">Théorème de Pythagore — fiche bilan.</h3>
+          <p class="cours-excerpt">Tout ce qu'il faut retenir pour le brevet.</p>
+          <div class="cours-meta">
+            <span>Il y a 3 sem.</span>
+            <span>5 min</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTE -->
+  <section class="manifesto" id="about">
+    <div class="container manifesto-inner">
+      <span class="eyebrow">§ III — Le projet</span>
+      <blockquote>
+        Les mathématiques ne sont pas une matière à subir. Ce sont les plus belles histoires jamais racontées — il suffit de savoir les lire.
+      </blockquote>
+      <div class="author">— Souleymane Kanté, professeur de mathématiques</div>
+    </div>
+  </section>
+
+  <!-- OUTILS INTERACTIFS -->
+  <section id="outils" class="tools-banner">
+    <div class="container">
+      <div>
+        <span class="eyebrow">§ IV — Outils interactifs</span>
+        <h2>Manipuler<br>pour <em>comprendre</em>.</h2>
+        <p>Une suite d'outils visuels conçus pour faire passer une intuition mathématique en quelques secondes. Gratuits, sans inscription, utilisables en classe.</p>
+        <a href="outil.html" class="btn btn-primary">Tous les outils →</a>
+      </div>
+      <div class="tools-list">
+        <a href="outil.html" class="tool-item">
+          <div>
+            <div class="tool-num">N° 01</div>
+            <div class="tool-name">Cercle trigonométrique</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a href="outil.html" class="tool-item">
+          <div>
+            <div class="tool-num">N° 02</div>
+            <div class="tool-name">Visualiseur de fonctions</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a href="outil.html" class="tool-item">
+          <div>
+            <div class="tool-num">N° 03</div>
+            <div class="tool-name">Loi binomiale → normale</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a href="outil.html" class="tool-item">
+          <div>
+            <div class="tool-num">N° 04</div>
+            <div class="tool-name">Suites récurrentes</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a href="outil.html" class="tool-item">
+          <div>
+            <div class="tool-num">N° 05</div>
+            <div class="tool-name">Dérivée géométrique</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDÉOS -->
+  <section id="videos" style="position:relative;">
+    <span class="decoration-numeral" style="bottom: 2rem; right: -1rem;">V</span>
+    <div class="container">
+      <div class="section-head">
+        <div class="left">
+          <span class="eyebrow">§ V — Vidéos populaires</span>
+          <h2>Des maths qui<br><em>tournent</em>.</h2>
+        </div>
+        <div class="right">
+          Animations Manim sur TikTok, Shorts YouTube, formats longs. Pour apprendre dans les transports — ou pour le plaisir.
+        </div>
+      </div>
+      <div class="videos-grid">
+        <a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener" class="video-card">
+          <div class="video-thumb">
+            <svg viewBox="0 0 200 360" xmlns="http://www.w3.org/2000/svg">
+              <text x="100" y="180" font-family="EB Garamond" font-size="60" font-style="italic" fill="#b87a2c" text-anchor="middle" font-weight="700">0,999...</text>
+              <text x="100" y="220" font-family="EB Garamond" font-size="40" fill="#f4ede0" text-anchor="middle" font-weight="700">= 1 ?</text>
+            </svg>
+          </div>
+          <div class="video-info">
+            <div class="video-platform">TikTok · @nba9517</div>
+            <h3 class="video-title">Pourquoi 0,999... = 1 (et ce n'est pas une approximation)</h3>
+            <div class="video-stats">128K vues · 3,2K likes</div>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="video-card">
+          <div class="video-thumb">
+            <svg viewBox="0 0 200 360" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="180" r="80" fill="none" stroke="#2c4870" stroke-width="3"/>
+              <line x1="100" y1="180" x2="160" y2="120" stroke="#a83246" stroke-width="3"/>
+              <text x="100" y="290" font-family="EB Garamond" font-size="22" font-style="italic" fill="#f4ede0" text-anchor="middle" font-weight="700">cos · sin</text>
+            </svg>
+          </div>
+          <div class="video-info">
+            <div class="video-platform">YouTube Short</div>
+            <h3 class="video-title">Le cercle trigo en 60 secondes chrono</h3>
+            <div class="video-stats">42K vues · 1,8K likes</div>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="video-card">
+          <div class="video-thumb">
+            <svg viewBox="0 0 200 360" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 30 280 Q 70 100, 100 180 T 170 80" fill="none" stroke="#b87a2c" stroke-width="4"/>
+              <text x="100" y="320" font-family="EB Garamond" font-size="22" font-style="italic" fill="#f4ede0" text-anchor="middle" font-weight="700">f '(x)</text>
+            </svg>
+          </div>
+          <div class="video-info">
+            <div class="video-platform">YouTube Long</div>
+            <h3 class="video-title">La dérivée enfin comprise (vraiment)</h3>
+            <div class="video-stats">86K vues · 4,1K likes</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <div class="container newsletter-inner">
+      <span class="eyebrow">§ VI — Lettre hebdomadaire</span>
+      <h2>Une <em>fiche méthode</em><br>chaque dimanche.</h2>
+      <p>Reçois chaque semaine une fiche de révision PDF, un exercice corrigé et une astuce pour le bac ou le brevet. Gratuit, désabonnement en un clic.</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Merci ! (formulaire à connecter à un service d\'emailing)');">
+        <input type="email" placeholder="ton.email@exemple.fr" required>
+        <button class="btn btn-primary" type="submit">S'inscrire</button>
+      </form>
+      <div class="newsletter-meta">Sans spam · RGPD · Désabonnement en un clic</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand">
+            <span class="brand-mark"></span>
+            <span>SKmaths</span>
+          </a>
+          <p class="footer-tagline">
+            Le hub des maths du collège à la prépa. Cours, exercices, vidéos et outils interactifs — par un professeur en exercice.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Contenus</h4>
+          <ul>
+            <li><a href="niveau.html">Cours par niveau</a></li>
+            <li><a href="chapitre.html">Exercices corrigés</a></li>
+            <li><a href="#">Annales</a></li>
+            <li><a href="outil.html">Outils interactifs</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Réseaux</h4>
+          <ul>
+            <li><a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener">TikTok @nba9517</a></li>
+            <li><a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>À propos</h4>
+          <ul>
+            <li><a href="#about">Le projet</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Cours particuliers</a></li>
+            <li><a href="#">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SKmaths. Tous droits réservés.</span>
+        <span>Conçu avec rigueur.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

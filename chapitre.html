@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suites — limites et récurrence · Terminale · SKmaths</title>
+  <meta name="description" content="Cours complet sur les suites en Terminale spé : convergence, raisonnement par récurrence, théorèmes de comparaison. Avec animations et exercices corrigés." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- KaTeX pour les formules -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}] });"></script>
+  <link rel="stylesheet" href="skmaths.css">
+  <style>
+    /* ===== Spécifique page chapitre ===== */
+    .chapter-hero {
+      padding: 2.5rem 0 3rem;
+      border-bottom: 1px solid var(--grid);
+      margin-bottom: 3rem;
+    }
+    .chapter-hero .tags {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .chapter-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      line-height: 1.02; margin: 0; font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    .chapter-hero h1 em { font-style: italic; color: var(--cos); font-weight: 500; }
+    .chapter-hero .lede {
+      font-size: 1.1rem; color: var(--ink-soft);
+      margin: 1.2rem 0 0; max-width: 640px; line-height: 1.55;
+    }
+    .chapter-info {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--grid);
+      font-family: var(--mono); font-size: 0.72rem;
+      color: var(--ink-soft); letter-spacing: 0.1em;
+    }
+    .chapter-info strong { color: var(--ink); font-weight: 500; }
+
+    /* Layout 2 colonnes : sommaire + contenu */
+    .chapter-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .chapter-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .sidebar { position: relative !important; top: 0 !important; }
+    }
+
+    /* Sommaire latéral */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      align-self: start;
+    }
+    .sidebar-head {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 1rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid var(--grid);
+    }
+    .sidebar-list {
+      list-style: none; padding: 0; margin: 0;
+      counter-reset: toc;
+    }
+    .sidebar-list li {
+      margin-bottom: 0.7rem;
+      counter-increment: toc;
+    }
+    .sidebar-list a {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      transition: color 0.2s, padding-left 0.2s;
+      display: block;
+      padding-left: 0;
+      border-left: 2px solid transparent;
+      padding: 0.2rem 0 0.2rem 0.8rem;
+      margin-left: -0.8rem;
+      font-style: italic;
+    }
+    .sidebar-list a:hover { color: var(--ink); padding-left: 1.1rem; }
+    .sidebar-list a.active { color: var(--cos); border-left-color: var(--cos); font-weight: 500; }
+    .sidebar-list a::before {
+      content: counter(toc, decimal-leading-zero) ". ";
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-soft);
+      font-style: normal;
+      letter-spacing: 0.08em;
+      margin-right: 0.3rem;
+    }
+
+    /* Contenu */
+    .content { max-width: 720px; }
+    .content h2 {
+      font-size: 2rem;
+      font-weight: 400;
+      margin: 3.5rem 0 1.5rem;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      scroll-margin-top: 100px;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h2 em { color: var(--cos); font-style: italic; font-weight: 500; }
+    .content h2::before {
+      content: "§ " counter(section, upper-roman);
+      counter-increment: section;
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+    .content { counter-reset: section; }
+    .content h3 {
+      font-size: 1.35rem;
+      font-style: italic;
+      font-weight: 500;
+      margin: 2.5rem 0 1rem;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+    }
+    .content p {
+      margin: 0 0 1.2rem;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    .content p .highlight {
+      background: linear-gradient(180deg, transparent 60%, rgba(184,122,44,0.25) 60%);
+      padding: 0 2px;
+    }
+
+    /* Encadrés théorème / définition */
+    .box {
+      background: var(--paper);
+      border-left: 3px solid var(--cos);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      position: relative;
+    }
+    .box.theoreme { border-left-color: var(--sin); }
+    .box.demonstration { border-left-color: var(--tan); background: rgba(184,122,44,0.05); }
+    .box.exemple { border-left-color: var(--ink); background: transparent; border: 1px dashed var(--grid); border-left: 3px solid var(--ink); }
+    .box-label {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cos);
+      margin-bottom: 0.6rem;
+    }
+    .box.theoreme .box-label { color: var(--sin); }
+    .box.demonstration .box-label { color: var(--tan); }
+    .box.exemple .box-label { color: var(--ink); }
+    .box p:last-child { margin-bottom: 0; }
+    .box-num {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-right: 0.4rem;
+    }
+
+    /* Animation Manim placeholder */
+    .manim-block {
+      margin: 2.5rem 0;
+      position: relative;
+    }
+    .manim-frame {
+      aspect-ratio: 16/9;
+      background: var(--ink);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .manim-frame::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: rgba(244,237,224,0.95);
+    }
+    .manim-frame::after {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-40%, -50%);
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 14px 0 14px 22px;
+      border-color: transparent transparent transparent var(--ink);
+    }
+    .manim-frame svg {
+      width: 80%; max-width: 500px;
+      opacity: 0.6;
+    }
+    .manim-caption {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .manim-caption .duration {
+      color: var(--tan);
+    }
+
+    /* Exercices */
+    .exo {
+      background: var(--paper);
+      border: 1px solid var(--grid);
+      padding: 1.5rem 1.7rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+    .exo-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .exo-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .exo-num strong { color: var(--ink); }
+    .difficulty {
+      letter-spacing: 0.1em;
+      color: var(--tan);
+      font-size: 0.9rem;
+    }
+    .difficulty .off { color: var(--grid); }
+    .exo-statement { margin-bottom: 1rem; }
+    .exo-actions {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid var(--grid);
+    }
+    .toggle-btn {
+      padding: 0.45rem 0.9rem;
+      background: transparent;
+      border: 1px solid var(--grid);
+      border-radius: 2px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .toggle-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .toggle-btn.active { background: var(--cos); color: var(--bg); border-color: var(--cos); }
+    .reveal { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--grid); }
+    .reveal.shown { display: block; }
+    .reveal .label-tiny {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 0.5rem;
+    }
+
+    /* Encart téléchargement fiche */
+    .download-card {
+      background: linear-gradient(135deg, var(--ink) 0%, #2d3247 100%);
+      color: var(--bg);
+      padding: 2rem 2rem;
+      border-radius: 4px;
+      margin: 3rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .download-card::before {
+      content: "";
+      position: absolute;
+      top: -40%; right: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(184,122,44,0.15), transparent 60%);
+    }
+    .download-card-text {
+      position: relative;
+      flex: 1; min-width: 240px;
+    }
+    .download-card-text .eyebrow { color: rgba(244,237,224,0.55); }
+    .download-card-text h3 {
+      margin: 0.5rem 0 0.4rem;
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--bg);
+    }
+    .download-card-text p {
+      margin: 0;
+      color: rgba(244,237,224,0.7);
+      font-size: 0.95rem;
+    }
+    .download-card .btn-primary {
+      background: var(--bg);
+      color: var(--ink);
+      border-color: var(--bg);
+      position: relative;
+    }
+    .download-card .btn-primary:hover { background: var(--tan); border-color: var(--tan); color: var(--ink); }
+
+    /* QR Code section */
+    .qr-section {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: var(--paper);
+      border: 1px solid var(--grid);
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .qr-visual {
+      width: 130px; height: 130px;
+      flex-shrink: 0;
+      background: var(--bg);
+      border: 1px solid var(--grid);
+      display: grid;
+      place-items: center;
+      padding: 8px;
+    }
+    .qr-visual svg { width: 100%; height: 100%; }
+    .qr-text { flex: 1; min-width: 220px; }
+    .qr-text h4 {
+      margin: 0.3rem 0 0.4rem;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 500;
+    }
+    .qr-text p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    /* Navigation chapitre (suiv/préc) */
+    .chapter-nav {
+      margin: 4rem 0 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--grid);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) { .chapter-nav { grid-template-columns: 1fr; } }
+    .chapter-nav a {
+      padding: 1.2rem 1.4rem;
+      background: var(--paper);
+      border: 1px solid var(--grid);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      transition: all 0.25s ease;
+    }
+    .chapter-nav a:hover {
+      border-color: var(--ink);
+      transform: translateY(-2px);
+    }
+    .chapter-nav a.next { text-align: right; }
+    .chapter-nav .dir {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .chapter-nav .title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* Formules KaTeX dans le texte */
+    .katex { font-size: 1.05em !important; }
+    .katex-display { margin: 1.5rem 0 !important; }
+  </style>
+</head>
+<body>
+
+  <nav class="top">
+    <div class="container row">
+      <a href="index.html" class="brand">
+        <span class="brand-mark"></span>
+        <span>SKmaths</span>
+      </a>
+      <div class="nav-links">
+        <a href="niveau.html">Niveaux</a>
+        <a href="chapitre.html" class="active">Cours</a>
+        <a href="outil.html">Outils</a>
+        <a href="index.html#videos">Vidéos</a>
+        <a href="index.html#about">À propos</a>
+      </div>
+      <a href="index.html#newsletter" class="nav-cta">S'abonner</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Fil d'Ariane -->
+    <nav class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span class="sep">/</span>
+      <a href="niveau.html">Terminale</a>
+      <span class="sep">/</span>
+      <span style="color: var(--ink);">Suites — limites et récurrence</span>
+    </nav>
+
+    <!-- Tête du chapitre -->
+    <header class="chapter-hero">
+      <div class="tags">
+        <span class="tag tag-cos">Chapitre 02 · Terminale</span>
+        <span class="tag tag-ink">Analyse</span>
+        <span class="tag tag-tan">★★★</span>
+      </div>
+      <h1>Suites — <em>limites</em><br>et raisonnement par récurrence.</h1>
+      <p class="lede">
+        Le chapitre charnière de la Terminale. Comprendre la convergence d'une suite, démontrer rigoureusement par récurrence, et savoir comparer pour conclure quand un calcul direct est impossible. Indispensable pour le bac, fondamental pour la suite.
+      </p>
+      <div class="chapter-info">
+        <span><strong>Durée estimée</strong> · 14 min de lecture</span>
+        <span><strong>Difficulté</strong> · ★★★ / ★★★★</span>
+        <span><strong>Prérequis</strong> · Suites de Première</span>
+        <span><strong>Mise à jour</strong> · Mai 2026</span>
+      </div>
+    </header>
+
+    <!-- Layout principal -->
+    <div class="chapter-layout">
+
+      <!-- Sommaire -->
+      <aside class="sidebar">
+        <div class="sidebar-head">Sommaire</div>
+        <ol class="sidebar-list">
+          <li><a href="#section-1" class="active">Rappels sur les suites</a></li>
+          <li><a href="#section-2">Limite d'une suite</a></li>
+          <li><a href="#section-3">Raisonnement par récurrence</a></li>
+          <li><a href="#section-4">Théorèmes de comparaison</a></li>
+          <li><a href="#section-5">Exercices d'application</a></li>
+          <li><a href="#section-6">Pour aller plus loin</a></li>
+        </ol>
+      </aside>
+
+      <!-- Contenu -->
+      <article class="content">
+
+        <h2 id="section-1">Rappels sur les <em>suites</em>.</h2>
+        <p>
+          Une suite numérique est une fonction définie sur $\mathbb{N}$ (ou une partie de $\mathbb{N}$) à valeurs dans $\mathbb{R}$. On note $(u_n)_{n \in \mathbb{N}}$ ou plus simplement $(u_n)$. Le terme général $u_n$ est l'image de l'entier $n$.
+        </p>
+        <p>
+          On distingue deux <span class="highlight">modes de définition</span> : la forme <em>explicite</em>, où $u_n$ s'exprime directement en fonction de $n$ (par exemple $u_n = 2n + 3$) ; et la forme <em>récurrente</em>, où chaque terme se calcule à partir du précédent (par exemple $u_{n+1} = 2 u_n + 1$).
+        </p>
+
+        <div class="box exemple">
+          <div class="box-label">Exemple 1 — Suite arithmético-géométrique</div>
+          <p>
+            Soit la suite définie par $u_0 = 1$ et pour tout $n \in \mathbb{N}$, $u_{n+1} = \dfrac{1}{2} u_n + 3$. Les premiers termes sont $u_0 = 1$, $u_1 = 3{,}5$, $u_2 = 4{,}75$, $u_3 = 5{,}375$. On observe que les termes semblent se rapprocher de $6$.
+          </p>
+        </div>
+
+        <h2 id="section-2">Limite d'une <em>suite</em>.</h2>
+
+        <div class="box">
+          <div class="box-label">Définition · Limite finie</div>
+          <p>
+            On dit que la suite $(u_n)$ converge vers le réel $\ell$ lorsque tout intervalle ouvert contenant $\ell$ contient tous les termes de la suite à partir d'un certain rang. On note alors :
+          </p>
+          <p style="text-align: center;">$$ \lim_{n \to +\infty} u_n = \ell $$</p>
+        </div>
+
+        <p>
+          Cette définition formalise une intuition simple : « les termes finissent par s'approcher aussi près qu'on veut de $\ell$ ». L'animation ci-dessous illustre exactement cette idée pour la suite définie à l'Exemple 1.
+        </p>
+
+        <!-- Bloc Manim -->
+        <div class="manim-block">
+          <div class="manim-frame">
+            <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+              <line x1="60" y1="280" x2="560" y2="280" stroke="#dfd5bf" stroke-width="1.5"/>
+              <line x1="60" y1="40" x2="60" y2="280" stroke="#dfd5bf" stroke-width="1.5"/>
+              <line x1="60" y1="80" x2="560" y2="80" stroke="#b87a2c" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
+              <text x="40" y="86" font-family="EB Garamond" font-size="20" font-style="italic" fill="#b87a2c" font-weight="700">ℓ</text>
+              <circle cx="100" cy="240" r="6" fill="#a83246"/>
+              <circle cx="160" cy="180" r="6" fill="#a83246"/>
+              <circle cx="220" cy="140" r="6" fill="#a83246"/>
+              <circle cx="280" cy="115" r="6" fill="#a83246"/>
+              <circle cx="340" cy="100" r="6" fill="#a83246"/>
+              <circle cx="400" cy="90" r="6" fill="#a83246"/>
+              <circle cx="460" cy="85" r="6" fill="#a83246"/>
+              <circle cx="520" cy="82" r="6" fill="#a83246"/>
+              <text x="100" y="305" font-family="JetBrains Mono" font-size="11" fill="#5a5d6e" text-anchor="middle">0</text>
+              <text x="520" y="305" font-family="JetBrains Mono" font-size="11" fill="#5a5d6e" text-anchor="middle">n</text>
+            </svg>
+          </div>
+          <div class="manim-caption">
+            <span>FIG. 1 — Convergence vers ℓ = 6</span>
+            <span class="duration">▶ Animation · 12 s</span>
+          </div>
+        </div>
+
+        <h2 id="section-3">Raisonnement par <em>récurrence</em>.</h2>
+        <p>
+          C'est l'outil de démonstration le plus important du chapitre. Pour montrer qu'une propriété $P(n)$ est vraie pour tout entier $n \geq n_0$, il suffit de vérifier l'<em>initialisation</em> ($P(n_0)$ est vraie) et l'<em>hérédité</em> (si $P(n)$ est vraie, alors $P(n+1)$ l'est aussi).
+        </p>
+
+        <div class="box theoreme">
+          <div class="box-label">Théorème · Principe de récurrence</div>
+          <p>
+            Soit $P(n)$ une propriété dépendant d'un entier $n$. Si :
+          </p>
+          <p style="margin-left: 1.5rem;">
+            <strong>(i)</strong> $P(n_0)$ est vraie pour un certain $n_0 \in \mathbb{N}$ ;<br>
+            <strong>(ii)</strong> Pour tout $n \geq n_0$, $P(n) \Rightarrow P(n+1)$ ;
+          </p>
+          <p>
+            alors $P(n)$ est vraie pour tout entier $n \geq n_0$.
+          </p>
+        </div>
+
+        <div class="box demonstration">
+          <div class="box-label">Démonstration rédigée · Exemple type bac</div>
+          <p>
+            <em>Énoncé.</em> Montrer que pour tout $n \in \mathbb{N}$ : $0 \leq u_n \leq 6$, où $(u_n)$ est la suite de l'Exemple 1.
+          </p>
+          <p>
+            <em>Initialisation.</em> Pour $n = 0$, $u_0 = 1$ et $0 \leq 1 \leq 6$. La propriété est vraie au rang 0.
+          </p>
+          <p>
+            <em>Hérédité.</em> Supposons que pour un certain $n \in \mathbb{N}$, on ait $0 \leq u_n \leq 6$. Alors :
+          </p>
+          <p style="text-align: center;">$$ 0 \leq \tfrac{1}{2} u_n \leq 3 \;\;\Rightarrow\;\; 3 \leq \tfrac{1}{2} u_n + 3 \leq 6 \;\;\Rightarrow\;\; 0 \leq u_{n+1} \leq 6 $$</p>
+          <p>
+            La propriété est donc héréditaire. Par récurrence, elle est vraie pour tout $n \in \mathbb{N}$. $\blacksquare$
+          </p>
+        </div>
+
+        <h2 id="section-4">Théorèmes de <em>comparaison</em>.</h2>
+        <p>
+          Quand on ne peut pas calculer directement une limite, on encadre la suite par d'autres suites dont on connaît la limite.
+        </p>
+
+        <div class="box theoreme">
+          <div class="box-label">Théorème · Théorème des gendarmes</div>
+          <p>
+            Soient $(u_n)$, $(v_n)$, $(w_n)$ trois suites telles qu'à partir d'un certain rang $v_n \leq u_n \leq w_n$. Si $(v_n)$ et $(w_n)$ convergent vers la même limite $\ell$, alors $(u_n)$ converge également vers $\ell$.
+        </p>
+        </div>
+
+        <p>
+          La vidéo ci-dessous illustre visuellement pourquoi ce théorème est intuitivement évident — et donne un exemple d'application sur la suite $u_n = \dfrac{\sin n}{n}$.
+        </p>
+
+        <!-- 2e bloc Manim -->
+        <div class="manim-block">
+          <div class="manim-frame">
+            <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+              <line x1="60" y1="170" x2="560" y2="170" stroke="#dfd5bf" stroke-width="1.5"/>
+              <path d="M 60 90 Q 200 100, 340 140 T 560 165" fill="none" stroke="#2c4870" stroke-width="3"/>
+              <path d="M 60 250 Q 200 240, 340 200 T 560 175" fill="none" stroke="#2c4870" stroke-width="3"/>
+              <path d="M 60 170 Q 130 140, 200 200 T 340 150 T 480 180 T 560 170" fill="none" stroke="#a83246" stroke-width="3"/>
+              <text x="490" y="60" font-family="EB Garamond" font-size="22" font-style="italic" fill="#2c4870" font-weight="700">wₙ</text>
+              <text x="490" y="280" font-family="EB Garamond" font-size="22" font-style="italic" fill="#2c4870" font-weight="700">vₙ</text>
+              <text x="490" y="155" font-family="EB Garamond" font-size="22" font-style="italic" fill="#a83246" font-weight="700">uₙ</text>
+            </svg>
+          </div>
+          <div class="manim-caption">
+            <span>FIG. 2 — Encadrement par deux gendarmes</span>
+            <span class="duration">▶ Animation · 18 s</span>
+          </div>
+        </div>
+
+        <!-- Encart téléchargement -->
+        <div class="download-card">
+          <div class="download-card-text">
+            <span class="eyebrow">FICHE DE RÉVISION</span>
+            <h3>L'essentiel sur 2 pages.</h3>
+            <p>Toutes les définitions, théorèmes et méthodes du chapitre, prêts à imprimer pour réviser avant un DS ou le bac.</p>
+          </div>
+          <a href="#" class="btn btn-primary">Télécharger le PDF →</a>
+        </div>
+
+        <h2 id="section-5">Exercices d'<em>application</em>.</h2>
+
+        <div class="exo">
+          <div class="exo-head">
+            <span class="exo-num">EXERCICE <strong>01</strong> · Type bac</span>
+            <span class="difficulty">★★<span class="off">★★</span></span>
+          </div>
+          <div class="exo-statement">
+            <p>
+              Soit la suite $(u_n)$ définie par $u_0 = 0$ et $u_{n+1} = \sqrt{u_n + 2}$ pour tout $n \in \mathbb{N}$.
+            </p>
+            <p>
+              <strong>1.</strong> Montrer par récurrence que pour tout $n \in \mathbb{N}$, $0 \leq u_n \leq 2$.<br>
+              <strong>2.</strong> Étudier la monotonie de $(u_n)$.<br>
+              <strong>3.</strong> En déduire que $(u_n)$ converge et déterminer sa limite.
+            </p>
+          </div>
+          <div class="exo-actions">
+            <button class="toggle-btn" onclick="toggleReveal(this, 'indice-1')">Indice</button>
+            <button class="toggle-btn" onclick="toggleReveal(this, 'corrige-1')">Corrigé</button>
+            <a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener" class="toggle-btn">Vidéo →</a>
+          </div>
+          <div id="indice-1" class="reveal">
+            <div class="label-tiny">Indice</div>
+            <p>Pour la question 2, étudier le signe de $u_{n+1} - u_n$, soit $\sqrt{u_n+2} - u_n$. Multiplier par la quantité conjuguée.</p>
+          </div>
+          <div id="corrige-1" class="reveal">
+            <div class="label-tiny">Corrigé rédigé</div>
+            <p><em>1.</em> Initialisation : $u_0 = 0$, donc $0 \leq u_0 \leq 2$. Hérédité : supposons $0 \leq u_n \leq 2$, alors $2 \leq u_n + 2 \leq 4$, et par croissance de la racine, $\sqrt{2} \leq u_{n+1} \leq 2$. A fortiori $0 \leq u_{n+1} \leq 2$.</p>
+            <p><em>2.</em> $u_{n+1}^2 - u_n^2 = u_n + 2 - u_n^2 = -(u_n - 2)(u_n + 1) \geq 0$ pour $u_n \in [0, 2]$. La suite est donc croissante.</p>
+            <p><em>3.</em> $(u_n)$ est croissante et majorée par 2, donc converge. Sa limite $\ell$ vérifie $\ell = \sqrt{\ell + 2}$, soit $\ell^2 - \ell - 2 = 0$, qui donne $\ell = 2$ (l'autre racine étant négative). $\blacksquare$</p>
+          </div>
+        </div>
+
+        <div class="exo">
+          <div class="exo-head">
+            <span class="exo-num">EXERCICE <strong>02</strong> · Théorème des gendarmes</span>
+            <span class="difficulty">★★★<span class="off">★</span></span>
+          </div>
+          <div class="exo-statement">
+            <p>
+              Étudier la limite de la suite définie pour $n \geq 1$ par $u_n = \dfrac{\cos n + n}{n}$.
+            </p>
+          </div>
+          <div class="exo-actions">
+            <button class="toggle-btn" onclick="toggleReveal(this, 'indice-2')">Indice</button>
+            <button class="toggle-btn" onclick="toggleReveal(this, 'corrige-2')">Corrigé</button>
+          </div>
+          <div id="indice-2" class="reveal">
+            <div class="label-tiny">Indice</div>
+            <p>Décomposer la fraction et encadrer le terme contenant $\cos n$.</p>
+          </div>
+          <div id="corrige-2" class="reveal">
+            <div class="label-tiny">Corrigé rédigé</div>
+            <p>On écrit $u_n = \dfrac{\cos n}{n} + 1$. Comme $-1 \leq \cos n \leq 1$, on a $-\dfrac{1}{n} \leq \dfrac{\cos n}{n} \leq \dfrac{1}{n}$. Les deux suites encadrantes tendent vers 0 ; par le théorème des gendarmes, $\dfrac{\cos n}{n} \to 0$. Donc $u_n \to 1$. $\blacksquare$</p>
+          </div>
+        </div>
+
+        <h2 id="section-6">Pour aller <em>plus loin</em>.</h2>
+        <p>
+          Une fois le chapitre maîtrisé, deux pistes pour pousser : les suites adjacentes (préparation à l'analyse en prépa), et les suites de Cauchy (notion universitaire). La chaîne YouTube contient une vidéo introductive sur la dichotomie, méthode algorithmique fondée sur le théorème des valeurs intermédiaires.
+        </p>
+
+        <!-- QR Code -->
+        <div class="qr-section">
+          <div class="qr-visual">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <!-- QR code stylisé (placeholder visuel) -->
+              <rect width="100" height="100" fill="#f4ede0"/>
+              <g fill="#1a1d2e">
+                <rect x="10" y="10" width="22" height="22"/>
+                <rect x="14" y="14" width="14" height="14" fill="#f4ede0"/>
+                <rect x="18" y="18" width="6" height="6"/>
+                <rect x="68" y="10" width="22" height="22"/>
+                <rect x="72" y="14" width="14" height="14" fill="#f4ede0"/>
+                <rect x="76" y="18" width="6" height="6"/>
+                <rect x="10" y="68" width="22" height="22"/>
+                <rect x="14" y="72" width="14" height="14" fill="#f4ede0"/>
+                <rect x="18" y="76" width="6" height="6"/>
+                <rect x="38" y="14" width="4" height="4"/>
+                <rect x="46" y="14" width="4" height="4"/>
+                <rect x="54" y="14" width="4" height="4"/>
+                <rect x="42" y="22" width="4" height="4"/>
+                <rect x="50" y="22" width="4" height="4"/>
+                <rect x="58" y="22" width="4" height="4"/>
+                <rect x="38" y="30" width="8" height="4"/>
+                <rect x="54" y="30" width="4" height="4"/>
+                <rect x="14" y="38" width="4" height="4"/>
+                <rect x="22" y="38" width="4" height="4"/>
+                <rect x="38" y="38" width="4" height="4"/>
+                <rect x="46" y="38" width="8" height="4"/>
+                <rect x="62" y="38" width="4" height="4"/>
+                <rect x="70" y="38" width="4" height="4"/>
+                <rect x="78" y="38" width="4" height="4"/>
+                <rect x="86" y="38" width="4" height="4"/>
+                <rect x="14" y="46" width="8" height="4"/>
+                <rect x="30" y="46" width="4" height="4"/>
+                <rect x="42" y="46" width="4" height="4"/>
+                <rect x="54" y="46" width="4" height="4"/>
+                <rect x="66" y="46" width="8" height="4"/>
+                <rect x="82" y="46" width="4" height="4"/>
+                <rect x="18" y="54" width="4" height="4"/>
+                <rect x="26" y="54" width="8" height="4"/>
+                <rect x="38" y="54" width="4" height="4"/>
+                <rect x="50" y="54" width="4" height="4"/>
+                <rect x="62" y="54" width="4" height="4"/>
+                <rect x="74" y="54" width="4" height="4"/>
+                <rect x="86" y="54" width="4" height="4"/>
+                <rect x="14" y="62" width="4" height="4"/>
+                <rect x="22" y="62" width="4" height="4"/>
+                <rect x="38" y="62" width="8" height="4"/>
+                <rect x="54" y="62" width="4" height="4"/>
+                <rect x="62" y="62" width="8" height="4"/>
+                <rect x="78" y="62" width="4" height="4"/>
+                <rect x="38" y="70" width="4" height="4"/>
+                <rect x="46" y="70" width="4" height="4"/>
+                <rect x="58" y="70" width="4" height="4"/>
+                <rect x="66" y="70" width="4" height="4"/>
+                <rect x="74" y="70" width="8" height="4"/>
+                <rect x="86" y="70" width="4" height="4"/>
+                <rect x="42" y="78" width="4" height="4"/>
+                <rect x="50" y="78" width="8" height="4"/>
+                <rect x="62" y="78" width="4" height="4"/>
+                <rect x="70" y="78" width="4" height="4"/>
+                <rect x="82" y="78" width="4" height="4"/>
+                <rect x="38" y="86" width="4" height="4"/>
+                <rect x="46" y="86" width="4" height="4"/>
+                <rect x="58" y="86" width="8" height="4"/>
+                <rect x="70" y="86" width="4" height="4"/>
+                <rect x="78" y="86" width="4" height="4"/>
+                <rect x="86" y="86" width="4" height="4"/>
+              </g>
+            </svg>
+          </div>
+          <div class="qr-text">
+            <span class="eyebrow">DÉMONSTRATION EN VIDÉO</span>
+            <h4>Scanne pour voir le chapitre en animation.</h4>
+            <p>Démonstration commentée des récurrences et application du théorème des gendarmes — sur ma chaîne YouTube @souleymanekante7972.</p>
+          </div>
+        </div>
+
+        <!-- Navigation chapitres -->
+        <nav class="chapter-nav">
+          <a href="#" class="prev">
+            <span class="dir">← Chapitre précédent</span>
+            <span class="title">Combinatoire et dénombrement</span>
+          </a>
+          <a href="#" class="next">
+            <span class="dir">Chapitre suivant →</span>
+            <span class="title">Limites de fonctions</span>
+          </a>
+        </nav>
+
+      </article>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand">
+            <span class="brand-mark"></span>
+            <span>SKmaths</span>
+          </a>
+          <p class="footer-tagline">
+            Le hub des maths du collège à la prépa. Cours, exercices, vidéos et outils interactifs — par un professeur en exercice.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Contenus</h4>
+          <ul>
+            <li><a href="niveau.html">Cours par niveau</a></li>
+            <li><a href="chapitre.html">Exercices corrigés</a></li>
+            <li><a href="#">Annales</a></li>
+            <li><a href="outil.html">Outils interactifs</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Réseaux</h4>
+          <ul>
+            <li><a href="https://www.tiktok.com/@nba9517" target="_blank" rel="noopener">TikTok @nba9517</a></li>
+            <li><a href="https://www.youtube.com/@souleymanekante7972" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="index.html#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>À propos</h4>
+          <ul>
+            <li><a href="index.html#about">Le projet</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Cours particuliers</a></li>
+            <li><a href="#">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SKmaths. Tous droits réservés.</span>
+        <span>Conçu avec rigueur.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleReveal(btn, id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('shown');
+      btn.classList.toggle('active');
+    }
+
+    // Highlight du sommaire au scroll
+    const sections = document.querySelectorAll('.content h2[id]');
+    const links = document.querySelectorAll('.sidebar-list a');
+    function updateActive() {
+      let current = sections[0]?.id;
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 150) current = s.id;
+      });
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+      });
+    }
+    window.addEventListener('scroll', updateActive);
+  </script>
+
+</body>
+</html>
