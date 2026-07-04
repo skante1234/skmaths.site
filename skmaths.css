@@ -222,3 +222,51 @@ footer {
 .tag-sin { background: rgba(168, 50, 70, 0.08); color: var(--sin); }
 .tag-tan { background: rgba(184, 122, 44, 0.1); color: var(--tan); }
 .tag-ink { background: rgba(26, 29, 46, 0.08); color: var(--ink); }
+
+/* --- Page niveau : listes de téléchargement --- */
+.chapitre {
+  margin-bottom: 3rem;
+}
+.chapitre h2 {
+  border-bottom: 2px solid var(--ochre, #C89464);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.chapitre-intro {
+  font-style: italic;
+  color: var(--slate, #4A5568);
+  margin-bottom: 1.2rem;
+}
+.liste-telechargements {
+  list-style: none;
+  padding: 0;
+}
+.liste-telechargements li {
+  margin-bottom: 0.6rem;
+}
+.liste-telechargements a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: var(--parchment-light, #F5EFE0);
+  border: 1px solid var(--ochre, #C89464);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--ink, #2A2418);
+  transition: all 0.2s ease;
+}
+.liste-telechargements a:hover {
+  background: var(--parchment, #EDE4CE);
+  transform: translateX(4px);
+}
+.doc-titre { flex-grow: 1; font-weight: 500; }
+.doc-format {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--sanguine, #8B3A1E);
+  color: white;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+.a-venir { opacity: 0.5; }
